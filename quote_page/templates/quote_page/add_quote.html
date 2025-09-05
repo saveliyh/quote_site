@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}Тут вы можете добавить свою цитату{% endblock %}</title>
+</head>
+
+<body>
+    <header>
+        <h1>Добавьте цитату</h1>
+    </header>
+
+    <div class="content">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <div>
+        <a href="/">Страница с цитатой</a>
+    </div>
+
+
+</body>
+
+</html>

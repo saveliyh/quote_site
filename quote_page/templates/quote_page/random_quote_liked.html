@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}Тут вы можете увидеть вашу цитату{% endblock %}</title>
+</head>
+
+<body>
+    <header>
+        <h1>Страница с цитатой</h1>
+    </header>
+
+    <div class="content">
+        {% block content %}
+        <p>{{quote}}</p>
+        <p>Источник цитаты: {{source}}</p>
+        <p>{{views}} раз видели цитату</p>
+        <p>{{likes}} лайков</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="data" value="{{quote}} 1">Убрать лайк</button>
+        </form>
+        {% endblock %}
+    </div>
+    <footer>
+        <a href=statistics>Статистика</a>
+        <a href=add_quote>Добавить цитату</a>
+    </footer>
+
+
+</body>
+
+</html>

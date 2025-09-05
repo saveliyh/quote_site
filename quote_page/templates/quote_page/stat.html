@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}Тут вы можете увидеть статистику по цитатам{% endblock %}</title>
+</head>
+
+<body>
+    <header>
+        <h1>Статистика цитат</h1>
+    </header>
+
+    <div class="content">
+        {% block content %}
+        <p>цитата источник лайки</p>
+        {% for quote in quotes %}
+        <p>{{ quote.quote }} {{ quote.source }} {{ quote.likes }}</p>
+        {% endfor %}
+        {% endblock %}
+    </div>
+
+    <div>
+        <a href="/">Страница с цитатой</a>
+    </div>
+
+
+</body>
+
+</html>
