@@ -18,7 +18,7 @@
         <p>{{likes}} лайков</p>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" name="data" value="{{quote}} 0">Поставить лайк</button>
+            <button type="submit" name="data" value="{{quote}}0">Поставить лайк</button>
         </form>
         {% endblock %}
     </div>

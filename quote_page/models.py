@@ -8,3 +8,10 @@ class Quote(models.Model):
     likes = models.IntegerField()
     dislikes = models.IntegerField()
     weight = models.IntegerField()
+
+
+class TableQuote(models.Model):
+    position = models.IntegerField()
+    quote = models.CharField(max_length=100)
+    source = models.CharField(max_length=100)
+    likes = models.IntegerField()

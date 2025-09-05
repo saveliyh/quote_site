@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .models import Quote
+from .models import Quote, TableQuote
 from .forms import QuoteForm
 from .utils import check_data, get_statistics, get_random
 from django.contrib.auth import authenticate, login
@@ -14,15 +14,23 @@ def add_quote(request):
         if form.is_valid():
             data = form.cleaned_data
             if check_data(data):
+                likes = random.randint(0, 100)
                 quote = Quote(
                     quote=data["your_quote"],
                     source=data["quote_source"],
                     weight=data["weight"],
-                    likes=random.randint(0, 100),
+                    likes=likes,
                     dislikes=0,
                     views=0,
                 )
                 quote.save()
+                table_quote = TableQuote(
+                    position=0,
+                    quote=data["your_quote"],
+                    source=data["quote_source"],
+                    likes=likes,
+                )
+                table_quote.save()
                 print("success")
                 return render(request, "quote_page/success_add.html", {"form": form})
             else:
@@ -63,9 +71,13 @@ def random_quote(request):
         )
     else:
         print(list(request.POST.items()))
-        quote, liked = request.POST.get("data").split(" ")
+        data = request.POST.get("data")
+        quote, liked = data[:-1], data[-1]
         quote = Quote.objects.get(quote=quote)
+        table_quote = TableQuote.objects.get(quote=quote)
         if liked == "1":
+            table_quote.likes -= 1
+            table_quote.save()
             quote.likes -= 1
             quote.save()
             return render(
@@ -79,6 +91,8 @@ def random_quote(request):
                 },
             )
         else:
+            table_quote.likes += 1
+            table_quote.save()
             quote.likes += 1
             quote.save()
             return render(

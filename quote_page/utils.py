@@ -1,4 +1,4 @@
-from .models import Quote
+from .models import Quote, TableQuote
 from numpy.random import choice
 
 
@@ -17,15 +17,14 @@ def check_data(data):
 
 
 def get_statistics():
-    quotes = Quote.objects.order_by("-likes")[:10]
+    quotes = TableQuote.objects.order_by("-likes")
+    ids = []
+    i = 0
+    for quote in quotes[:10]:
+        i += 1
+        ids.append(quote.id)
+        quote.position = i
+        quote.save()
+    table = TableQuote.objects.filter(id__in=ids).order_by("position")
 
-    return {
-        "quotes": [
-            {
-                "quote": quote.quote,
-                "source": quote.source,
-                "likes": quote.likes,
-            }
-            for quote in quotes
-        ]
-    }
+    return {"quotes": table}
