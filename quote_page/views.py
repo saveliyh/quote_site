@@ -4,11 +4,9 @@ from .models import Quote
 from .forms import QuoteForm
 from .utils import check_data, get_statistics, get_random
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
 import random
 
 
-@login_required
 def add_quote(request):
 
     if request.method == "POST":
@@ -35,7 +33,6 @@ def add_quote(request):
     return render(request, "quote_page/add_quote.html", {"form": form})
 
 
-@login_required
 def random_quote(request):
     if request.method == "GET":
         quotes = Quote.objects.all()
@@ -96,7 +93,6 @@ def random_quote(request):
             )
 
 
-@login_required
 def statistics(request):
 
     return render(
@@ -104,15 +100,3 @@ def statistics(request):
         "quote_page/stat.html",
         get_statistics(),
     )
-
-
-def login_view(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        # Redirect to a success page.
-        return HttpResponseRedirect("/")
-    else:
-        return render(request, "quote_page/invalid_login.html")
