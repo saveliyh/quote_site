@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from .models import Quote, TableQuote
 from .forms import QuoteForm
 from .utils import check_data, get_statistics, get_random
-from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_protect
 import random
 
 
+@csrf_protect
 def add_quote(request):
 
     if request.method == "POST":
@@ -41,6 +41,7 @@ def add_quote(request):
     return render(request, "quote_page/add_quote.html", {"form": form})
 
 
+@csrf_protect
 def random_quote(request):
     if request.method == "GET":
         quotes = Quote.objects.all()
@@ -73,8 +74,8 @@ def random_quote(request):
         print(list(request.POST.items()))
         data = request.POST.get("data")
         quote, liked = data[:-1], data[-1]
-        quote = Quote.objects.get(quote=quote)
         table_quote = TableQuote.objects.get(quote=quote)
+        quote = Quote.objects.get(quote=quote)
         if liked == "1":
             table_quote.likes -= 1
             table_quote.save()
